@@ -1,49 +1,42 @@
+using System.Linq;
+using System.Windows.Input;
+
 namespace CrimeAvtoService;
 
 public partial class ReviewPage : ContentPage
 {
+
+
     public ReviewPage()
     {
         InitializeComponent();
-        Content = LoadServices();
+        LoadServices();
     }
 
-    public View GetContent() // LATER
+    private void Search_TextChanged(object sender, TextChangedEventArgs e)
     {
-        VerticalStackLayout layout = new VerticalStackLayout()
-        {
-            Children =
-            {
-                LoadServices(),
-            },
-        };
-
-        return layout;
     }
 
-    public ScrollView LoadServices()
+    public void LoadServices()
     {
-        StackLayout views = new StackLayout();
+        if (ServicesViewLayout.Count > 0)
+            ServicesViewLayout.Clear();
 
         foreach (var service in AvtoServiceDB.avtoServices)
         {
-            views.Add(LoadService(service));
+            ServicesViewLayout.Add(LoadService(service));
         }
-
-        return new ScrollView()
-        {
-            Content = views,
-        };
     }
 
 
-    private Frame LoadService(AvtoService service)
+    private Frame LoadService(AvtoService service, bool isVisible = true)
     {
         return new Frame()
         {
             HeightRequest = 80,
             Margin = new Thickness(5, 3),
             Padding = 0,
+            IsVisible = IsVisible,
 
             Content = new Grid()
             {
@@ -60,21 +53,59 @@ public partial class ReviewPage : ContentPage
                     },
                     new HorizontalStackLayout()
                     {
-                        HorizontalOptions = LayoutOptions.Center,
                         Padding = new Thickness(0, 2),
                         Children =
                         {
-                            new Label()
+                            new Image()
                             {
-                                TextColor=Colors.Gray,
-                                FontSize=18,
-                                HorizontalOptions= LayoutOptions.Center,
-                                Text = service.Name,
+                                BackgroundColor= Colors.DarkGray,
+                                Margin=5,
+                                HeightRequest=70,
+                                WidthRequest=70,
+                            },
+                            new VerticalStackLayout()
+                            {
+                                Children =
+                                {
+                                    new Label()
+                                    {
+                                        Margin=2,
+                                        TextColor=Colors.Black,
+                                        FontSize=16,
+                                        HorizontalOptions= LayoutOptions.Start,
+                                        Text =$"«{service.Name}»",
+                                    }
+                                },
                             }
                         }
                     },
                 }
             },
         };
+    }
+
+    private void Search_Clicked(object sender, EventArgs e)
+    {
+        string filter = SearchRequest.Text.Trim();
+
+        var children = ServicesViewLayout.Children.Select(a => a as Frame).ToArray();
+
+        int index = 0;
+
+        foreach (var service in AvtoServiceDB.avtoServices)
+        {
+            children[index].IsVisible = filter.Length == 0 || service.Name.ToLower().Contains(filter.ToLower()) || service.Services.Contains(filter.ToLower());
+
+            index++;
+        }
+
+        // ServicesView.
+        //  LoadServices(SearchRequest.Text);
+    }
+
+    private void ServiceRefreshView_Refreshing(object sender, EventArgs e)
+    {
+        LoadServices();
+        ServiceRefreshView.IsRefreshing = false;
     }
 }

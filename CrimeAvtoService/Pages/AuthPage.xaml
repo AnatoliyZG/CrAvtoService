@@ -19,6 +19,7 @@
                 <Entry Text="+7 (978)"
                        HorizontalTextAlignment="Center"
                        Margin="0,0,0,20"
+                       MaxLength="20"
                        x:Name="NumberEntry"
                        TextChanged="Number_TextChanged"/>
                 <!--
@@ -38,10 +39,11 @@
 
             </VerticalStackLayout>
         </Frame>
-        <Label Text="kk"
+        <Label Text=""
                Padding="0,10"
                TextColor="OrangeRed"
-               FontSize="18"
+               FontSize="16"
+               HorizontalTextAlignment="Center"
                x:Name="ErrorLabel"
                MaximumWidthRequest="300"
                HorizontalOptions="Center"/>

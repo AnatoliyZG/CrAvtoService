@@ -73,11 +73,12 @@ namespace CrimeAvtoService
                     Label = serv.Name,
                     Address = serv.Address,
                     Position = new Position(serv.Coords.lat, serv.Coords.lon),
-                    
+                    Tag = serv,
                 });
             }
             mapView.PinClicked += (object obj, PinClickedEventArgs arg) =>
             {
+                
                 NavigationPage.navigation.LoadTab(1);
             };
         }

@@ -11,4 +11,37 @@
         TextColor="White"
         FontSize="Title" />
     </Shell.TitleView>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="10, 5, 10, 5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Entry Placeholder="Поиск"
+                       x:Name="SearchRequest"
+                       TextChanged="Search_TextChanged"
+                       HorizontalOptions="FillAndExpand" />
+                <Button 
+                        WidthRequest="30"
+                        HeightRequest="30"
+                        Grid.Column="1"
+                        Clicked="Search_Clicked"/>
+            </Grid>
+
+            <Label Text="Фильтры"
+                   TextColor="Gray"/>
+        </VerticalStackLayout>
+        <RefreshView x:Name="ServiceRefreshView" Grid.Column="0" Grid.Row="1" Refreshing="ServiceRefreshView_Refreshing">
+            <ScrollView  x:Name="ServicesView">
+                <StackLayout x:Name="ServicesViewLayout"/>
+            </ScrollView>
+        </RefreshView>
+
+    </Grid>
 </ContentPage>
